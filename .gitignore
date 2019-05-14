@@ -21,3 +21,12 @@ Thumbs.db
 /static_collected
 /node_modules
 # </DEFAULT>
+
+/.idea/*
+*.iml
+.idea
+node_modules
+theme/node_modules
+theme/tools/node_modules
+/theme/tools/node_modules/
+/theme/tools/node_modules/*

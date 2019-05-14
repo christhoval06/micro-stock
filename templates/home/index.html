@@ -1,0 +1,31 @@
+{% extends 'base/metronic/content.html' %}
+
+{% load static i18n %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+
+{% block subheader_tools %}
+    <span class="m-subheader__daterange"
+          id="m_dashboard_daterangepicker">
+																	<span class="m-subheader__daterange-label">
+																		<span class="m-subheader__daterange-title"></span>
+																		<span class="m-subheader__daterange-date m--font-brand"></span>
+																	</span>
+																	<a href="#"
+                                                                       class="btn btn-sm btn-brand m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+																		<i class="la la-angle-down"></i>
+																	</a>
+																</span>
+{% endblock %}
+
+{% block content %}
+    <h1> Welcome to Home {{ username }}</h1>
+{% endblock %}
+
+
+{% block script_page_snippets %}
+    <script src="{% static 'assets/app/js/dashboard.js' %}" type="text/javascript"></script>
+{% endblock script_page_snippets %}

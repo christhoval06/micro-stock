@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- begin::Head -->
+<head>
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    {% include "partials/head.html" %}
+
+    <!--begin::Page Vendors Styles -->
+    {% block style_page_vendors %}
+    {% endblock style_page_vendors %}
+    <!--end::Page Vendors Styles -->
+
+    <!--begin::Page Snippets Styles-->
+    {% block style_page_snippets %}
+    {% endblock style_page_snippets %}
+    <!--end::Page Snippets Styles -->
+</head>
+<!-- end::Head -->
+<!-- end::Body -->
+<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+<!-- begin:: Page -->
+{% block content %}{% endblock %}
+<!-- end:: Page -->
+<!--begin::Base Scripts -->
+<script src="{% static 'assets/vendors/base/vendors.bundle.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/demo/default/base/scripts.bundle.js' %}" type="text/javascript"></script>
+<!--end::Base Scripts -->
+
+<!--begin::Page Vendors -->
+{% block script_page_vendors %}
+{% endblock script_page_vendors %}
+<!--end::Page Vendors -->
+
+<!--begin::Page Snippets -->
+{% block script_page_snippets %}
+{% endblock script_page_snippets %}
+<!--end::Page Snippets -->
+</body>
+<!-- end::Body -->
+</html>

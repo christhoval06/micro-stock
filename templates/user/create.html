@@ -1,0 +1,300 @@
+{% extends 'base/metronic/content.html' %}
+
+{% load static i18n widget_tweaks %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+
+{% block subheader_tools %}
+    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push"
+         m-dropdown-toggle="hover" aria-expanded="true">
+        <a href="#"
+           class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--outline-2x m-btn--air m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
+            <i class="la la-plus m--hide"></i>
+            <i class="la la-ellipsis-h"></i>
+        </a>
+        <div class="m-dropdown__wrapper">
+            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+            <div class="m-dropdown__inner">
+                <div class="m-dropdown__body">
+                    <div class="m-dropdown__content">
+                        <ul class="m-nav">
+                            <li class="m-nav__section m-nav__section--first m--hide">
+																							<span class="m-nav__section-text">
+																								Quick Actions
+																							</span>
+                            </li>
+                            <li class="m-nav__item">
+                                <a href="" class="m-nav__link">
+                                    <i class="m-nav__link-icon flaticon-share"></i>
+                                    <span class="m-nav__link-text">
+																									Activity
+																								</span>
+                                </a>
+                            </li>
+                            <li class="m-nav__item">
+                                <a href="" class="m-nav__link">
+                                    <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                    <span class="m-nav__link-text">
+																									Messages
+																								</span>
+                                </a>
+                            </li>
+                            <li class="m-nav__item">
+                                <a href="" class="m-nav__link">
+                                    <i class="m-nav__link-icon flaticon-info"></i>
+                                    <span class="m-nav__link-text">
+																									FAQ
+																								</span>
+                                </a>
+                            </li>
+                            <li class="m-nav__item">
+                                <a href="" class="m-nav__link">
+                                    <i class="m-nav__link-icon flaticon-lifebuoy"></i>
+                                    <span class="m-nav__link-text">
+																									Support
+																								</span>
+                                </a>
+                            </li>
+                            <li class="m-nav__separator m-nav__separator--fit"></li>
+                            <li class="m-nav__item">
+                                <a href="#" class="btn btn-outline-danger m-btn m-btn--pill m-btn--wide btn-sm">
+                                    Submit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div class="m-portlet m-portlet--last m-portlet--head-lg m-portlet--responsive-mobile" id="main_portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-progress">
+                        <!-- here can place a progress bar-->
+                    </div>
+                    <div class="m-portlet__head-wrapper">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    {{ title }}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <a href="#"
+                               class="btn btn-secondary m-btn m-btn--icon m-btn--wide m-btn--md m--margin-right-10">
+																					<span>
+																						<i class="la la-arrow-left"></i>
+																						<span>
+																							Back
+																						</span>
+																					</span>
+                            </a>
+                            <a href="#"
+                               class="btn btn-primary m-btn m-btn--icon m-btn--wide m-btn--md m--margin-right-10">
+																					<span>
+																						<i class="la la-puzzle-piece"></i>
+																						<span>
+																							Add Attributes
+																						</span>
+																					</span>
+                            </a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-accent  m-btn m-btn--icon m-btn--wide m-btn--md">
+																						<span>
+																							<i class="la la-check"></i>
+																							<span>
+																								Save
+																							</span>
+																						</span>
+                                </button>
+                                <button type="button"
+                                        class="btn btn-accent  dropdown-toggle dropdown-toggle-split m-btn m-btn--md"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="la la-plus"></i>
+                                        Save & New
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="la la-copy"></i>
+                                        Save & Duplicate
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="la la-undo"></i>
+                                        Save & Close
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="la la-close"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <form class="m-form m-form--label-align-left- m-form--state-" id="m_form">
+
+                        {% csrf_token %}
+
+                        {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field }}
+                        {% endfor %}
+
+                        <!--begin: Form Body -->
+                        <div class="m-portlet__body">
+                            <div class="row">
+                                <div class="col-xl-8 offset-xl-2">
+                                    <div class="m-form__section m-form__section--first">
+
+
+                                        <div class="m-form__heading">
+                                            <h3 class="m-form__heading-title">
+                                                {% trans 'User Details' %}
+                                            </h3>
+                                        </div>
+
+                                        {% for field in form.visible_fields %}
+
+                                            {% if field.name in 'first_name,last_name,email' %}
+
+                                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">
+                                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                                            {% if field.field.required %}*{% endif %} {{ field.label }}:
+                                                        {% endif %}
+                                                    </label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
+                                                        {% else %}
+                                                            <div class="m-checkbox-inline">
+                                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
+                                                                    {% render_field field %}
+                                                                    {{ field.label }}:
+                                                                    <span></span>
+                                                                </label>
+                                                            </div>
+                                                        {% endif %}
+
+
+                                                        {% if field.help_text %}
+                                                            <span class="m-form__help">{{ field.help_text }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+
+                                        {% if form.non_field_errors %}
+                                            <div class='form-group m-form__group has-danger'>
+                                                {% for error in form.non_field_errors %}
+                                                    <div class="form-control-feedback">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+                                    <div class="m-form__section m-form__section--first">
+                                        <div class="m-form__heading">
+                                            <h3 class="m-form__heading-title">
+                                                {% trans 'Account Details' %}
+                                            </h3>
+                                        </div>
+                                        {% for field in form.visible_fields %}
+
+                                            {% if field.name in 'username' %}
+
+                                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">
+                                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                                            {% if field.field.required %}*{% endif %} {{ field.label }}:
+                                                        {% endif %}
+                                                    </label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
+                                                        {% else %}
+                                                            <div class="m-checkbox-inline">
+                                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
+                                                                    {% render_field field %}
+                                                                    {{ field.label }}:
+                                                                    <span></span>
+                                                                </label>
+                                                            </div>
+                                                        {% endif %}
+
+
+                                                        {% if field.help_text %}
+                                                            <span class="m-form__help">{{ field.help_text }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </div>
+                                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+                                    <div class="m-form__section">
+                                        <div class="m-form__heading">
+                                            <h3 class="m-form__heading-title">
+                                                {% trans 'Client Settings' %}
+                                            </h3>
+                                        </div>
+
+                                        {% for field in form.visible_fields %}
+
+                                            {% if field.name in 'is_active,groups' %}
+
+                                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">
+                                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                                            {% if field.field.required %}*{% endif %} {{ field.label }}:
+                                                        {% endif %}
+                                                    </label>
+                                                    <div class="col-xl-9 col-lg-9">
+                                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
+                                                        {% else %}
+                                                            <div class="m-checkbox-inline">
+                                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
+                                                                    {% render_field field %}
+                                                                    {{ field.label }}:
+                                                                    <span></span>
+                                                                </label>
+                                                            </div>
+                                                        {% endif %}
+
+
+                                                        {% if field.help_text %}
+                                                            <span class="m-form__help">{{ field.help_text }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--end::Portlet-->
+        </div>
+    </div>
+{% endblock %}
