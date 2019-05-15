@@ -424,6 +424,8 @@
 
 
 
+
+
                                                                  {{ domain }}{% static "assets/app/media/img/emails/welcome/appap_color2x.png" %}"
                                                          style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; clear: both; border: 0; height: auto; float: none; width: 100%; max-width: 155px; display: block;"
                                                          title="Image" width="155"/>
@@ -482,6 +484,8 @@
                                         <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="right">
                                         <![endif]--><img align="right" alt="Image" border="0" class="right fixedwidth"
                                                          src="
+
+
 
 
 
@@ -586,8 +590,8 @@
                                         <div style="font-size: 12px; line-height: 18px; color: #555555; font-family: 'Open Sans', Helvetica, Arial, sans-serif;">
                                             <p style="font-size: 12px; line-height: 18px; margin: 0;"><strong><span
                                                     style="font-size: 20px; line-height: 30px;">
-                                                {% blocktrans %}
-                                                    Hi {{ created_user.first_name }} {{ created_user.last_name }}
+                                                {% blocktrans with first_name=created_user.first_name last_name=created_user.last_name %}
+                                                    Hi {{ first_name }} {{ last_name }}
                                                 {% endblocktrans %}
                                             </span></strong>
                                             </p>
@@ -818,6 +822,8 @@
 
 
 
+
+
                                                                                                          {{ domain }}{% static "assets/app/media/img/emails/welcome/facebook@2x.png" %}"
                                                                                                  style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; clear: both; height: auto; float: none; border: none; display: block;"
                                                                                                  title="Facebook"
@@ -825,6 +831,8 @@
                                                         <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px; border-collapse: collapse;"
                                                             valign="top"><a href="https://twitter.com/" target="_blank"><img
                                                                 alt="Twitter" height="32" src="
+
+
 
 
 
@@ -849,6 +857,8 @@
 
 
 
+
+
                                                                                                          {{ domain }}{% static "assets/app/media/img/emails/welcome/instagram@2x.png" %}"
                                                                                                  style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; clear: both; height: auto; float: none; border: none; display: block;"
                                                                                                  title="Instagram"
@@ -858,6 +868,8 @@
                                                                             target="_blank"><img alt="LinkedIn"
                                                                                                  height="32"
                                                                                                  src="
+
+
 
 
 
