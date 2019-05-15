@@ -1,0 +1,25 @@
+{% load i18n %}
+{% blocktrans %}
+    Hi {{ created_user.first_name }} {{created_user.last_name}},
+{% endblocktrans %}
+
+{% blocktrans with domain=site.domain %}
+   One account was create for you in {{ domain }}.
+{% endblocktrans %}
+
+{% trans "To Sign In use next credentials:" %}
+
+{% blocktrans with username=created_user.username password=form_data.password  %}
+   Username: {{ username }}
+   Password: {{ password }}
+{% endblocktrans %}
+
+
+{% trans "To Sign In, open next link:" %}
+
+http{% if secure %}s{% endif %}://{{ site.domain }}{% url "auth_login" %}
+
+{% trans "Tanks." %}
+
+{% trans "Cheers," %}
+{{ app_name }}

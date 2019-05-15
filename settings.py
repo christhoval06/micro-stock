@@ -18,6 +18,8 @@ SECRET_KEY = 'x^w*wyhyh5%1$%l@=5wa^56_+omn)b!-m9*+=uy0!%@!%ej0gy'
 
 AUTH_USER_MODEL = 'user.User'
 
+LOGOUT_REDIRECT_URL = 'home'
+
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = '/auth/login/'
 
@@ -29,6 +31,8 @@ INSTALLED_APPS.extend([
     'apps.user',
     'apps.home',
 ])
+
+APP_NAME = 'Micro Stock'
 
 TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'apps.utils.context_processors.menu',
@@ -46,6 +50,10 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = "hi@appname.com"
+
+DEBUG = False
 
 # https://beefree.io/templates/
 

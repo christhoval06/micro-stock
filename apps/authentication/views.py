@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 
 
 class AuthLoginView(LoginView):
@@ -11,3 +11,7 @@ class AuthLoginView(LoginView):
                 'title': 'Sign In',
             })
         return ctx
+
+
+class AuthLogoutView(LogoutView):
+    pass

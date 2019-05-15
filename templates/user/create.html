@@ -1,6 +1,6 @@
 {% extends 'base/metronic/content.html' %}
 
-{% load static i18n widget_tweaks %}
+{% load static i18n %}
 
 {% block title %}
     {{ title }}
@@ -90,6 +90,7 @@
                             </div>
                         </div>
                         <div class="m-portlet__head-tools">
+                            <!--
                             <a href="#"
                                class="btn btn-secondary m-btn m-btn--icon m-btn--wide m-btn--md m--margin-right-10">
 																					<span>
@@ -108,12 +109,18 @@
 																						</span>
 																					</span>
                             </a>
+                            -->
                             <div class="btn-group">
-                                <button type="button" class="btn btn-accent  m-btn m-btn--icon m-btn--wide m-btn--md">
+                                <button type="button" class="btn btn-accent  m-btn m-btn--icon m-btn--wide m-btn--md"
+                                        data-type="show-dialog"
+                                        data-dialog="alertDialog"
+                                        data-btns='[{"_type":"close", "_text":"{% trans "Cancel" %}"},{"_text":"{% trans 'Save' %}","_form": "form#createUserForm","_name":"_start", "_class":"m-btn m-btn--air btn btn-accent" ,"_type":"submit"}]'
+                                        data-msg="{{ next_message }}"
+                                        data-title="{{ title }}">
 																						<span>
 																							<i class="la la-check"></i>
 																							<span>
-																								Save
+																								{% trans "Save" %}
 																							</span>
 																						</span>
                                 </button>
@@ -143,158 +150,24 @@
                         </div>
                     </div>
                 </div>
+                <!--begin: Form Body -->
                 <div class="m-portlet__body">
-                    <form class="m-form m-form--label-align-left- m-form--state-" id="m_form">
 
-                        {% csrf_token %}
+                    {% include "partials/form.html"  with form_id="createUserForm" %}
 
-                        {% for hidden_field in form.hidden_fields %}
-                            {{ hidden_field }}
-                        {% endfor %}
-
-                        <!--begin: Form Body -->
-                        <div class="m-portlet__body">
-                            <div class="row">
-                                <div class="col-xl-8 offset-xl-2">
-                                    <div class="m-form__section m-form__section--first">
-
-
-                                        <div class="m-form__heading">
-                                            <h3 class="m-form__heading-title">
-                                                {% trans 'User Details' %}
-                                            </h3>
-                                        </div>
-
-                                        {% for field in form.visible_fields %}
-
-                                            {% if field.name in 'first_name,last_name,email' %}
-
-                                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">
-                                                        {% if field.field.widget.input_type not in 'checkbox' %}
-                                                            {% if field.field.required %}*{% endif %} {{ field.label }}:
-                                                        {% endif %}
-                                                    </label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        {% if field.field.widget.input_type not in 'checkbox' %}
-                                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
-                                                        {% else %}
-                                                            <div class="m-checkbox-inline">
-                                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
-                                                                    {% render_field field %}
-                                                                    {{ field.label }}:
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
-                                                        {% endif %}
-
-
-                                                        {% if field.help_text %}
-                                                            <span class="m-form__help">{{ field.help_text }}</span>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-
-                                        {% endfor %}
-
-
-                                        {% if form.non_field_errors %}
-                                            <div class='form-group m-form__group has-danger'>
-                                                {% for error in form.non_field_errors %}
-                                                    <div class="form-control-feedback">{{ error }}</div>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
-                                    <div class="m-form__section m-form__section--first">
-                                        <div class="m-form__heading">
-                                            <h3 class="m-form__heading-title">
-                                                {% trans 'Account Details' %}
-                                            </h3>
-                                        </div>
-                                        {% for field in form.visible_fields %}
-
-                                            {% if field.name in 'username' %}
-
-                                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">
-                                                        {% if field.field.widget.input_type not in 'checkbox' %}
-                                                            {% if field.field.required %}*{% endif %} {{ field.label }}:
-                                                        {% endif %}
-                                                    </label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        {% if field.field.widget.input_type not in 'checkbox' %}
-                                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
-                                                        {% else %}
-                                                            <div class="m-checkbox-inline">
-                                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
-                                                                    {% render_field field %}
-                                                                    {{ field.label }}:
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
-                                                        {% endif %}
-
-
-                                                        {% if field.help_text %}
-                                                            <span class="m-form__help">{{ field.help_text }}</span>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-
-                                        {% endfor %}
-                                    </div>
-                                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
-                                    <div class="m-form__section">
-                                        <div class="m-form__heading">
-                                            <h3 class="m-form__heading-title">
-                                                {% trans 'Client Settings' %}
-                                            </h3>
-                                        </div>
-
-                                        {% for field in form.visible_fields %}
-
-                                            {% if field.name in 'is_active,groups' %}
-
-                                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">
-                                                        {% if field.field.widget.input_type not in 'checkbox' %}
-                                                            {% if field.field.required %}*{% endif %} {{ field.label }}:
-                                                        {% endif %}
-                                                    </label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        {% if field.field.widget.input_type not in 'checkbox' %}
-                                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
-                                                        {% else %}
-                                                            <div class="m-checkbox-inline">
-                                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
-                                                                    {% render_field field %}
-                                                                    {{ field.label }}:
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
-                                                        {% endif %}
-
-
-                                                        {% if field.help_text %}
-                                                            <span class="m-form__help">{{ field.help_text }}</span>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
             <!--end::Portlet-->
         </div>
     </div>
 {% endblock %}
+
+{% block script_page_snippets %}
+    <script src="{% static 'assets/demo/default/custom/components/base/forms.js' %}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        (() => {
+            (new EventsToFormWithProcess("form#createUserForm")).init();
+        })();
+    </script>
+{% endblock script_page_snippets %}

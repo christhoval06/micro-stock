@@ -4,6 +4,6 @@ https://control.divio.com/api/v1/apps/serve/aldryn-django/2.2.1.1/17e41177-1e0d-
 https://control.divio.com/api/v1/apps/serve/aldryn-sso/1.6.0/6d90e844-d7ef-4faa-b527-5df3d49277be/aldryn-sso-1.6.0.tar.gz#egg=aldryn-sso==1.6.0
 # </INSTALLED_ADDONS>
 
-
 pytz
 django-widget-tweaks
+pip_tools

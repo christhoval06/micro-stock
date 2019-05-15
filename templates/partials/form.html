@@ -1,0 +1,125 @@
+{% load widget_tweaks %}
+
+<form class="m-form m-form--label-align-left- m-form--state-" id="{{ form_id }}" method="post">
+
+    {% csrf_token %}
+
+    {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field }}
+    {% endfor %}
+
+
+    <div class="row">
+        <div class="col-xl-8 offset-xl-2">
+            {% if form.layouts %}
+                {% for layout in form.layouts %}
+                    <div class="m-form__section {% if forloop.first %}m-form__section--first{% endif %}">
+
+
+                        <div class="m-form__heading">
+                            <h3 class="m-form__heading-title">
+                                {{ layout.title }}
+                            </h3>
+                        </div>
+
+                        {% for field in form.visible_fields %}
+
+                            {% if field.name in layout.fields %}
+
+                                <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">
+                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                            {% if field.field.required %}*{% endif %}
+                                            {{ field.label }}:
+                                        {% endif %}
+                                    </label>
+                                    <div class="col-xl-9 col-lg-9">
+                                        {% if field.field.widget.input_type not in 'checkbox' %}
+                                            {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
+                                        {% else %}
+                                            <div class="m-checkbox-inline">
+                                                <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
+                                                    {% render_field field %}
+                                                    {{ field.label }}:
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if field.help_text %}
+                                            <span class="m-form__help">{{ field.help_text }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                        {% if form.non_field_errors %}
+                            <div class='form-group m-form__group has-danger'>
+                                {% for error in form.non_field_errors %}
+                                    <div class="form-control-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if not forloop.last %}
+                        <div class="m-separator m-separator--dashed m-separator--lg"></div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="m-form__section m-form__section--first">
+
+
+                    <div class="m-form__heading">
+                        <h3 class="m-form__heading-title">
+                            {{ title }}
+                        </h3>
+                    </div>
+
+                    {% for field in form.visible_fields %}
+
+                        <div class="form-group m-form__group row {% if field.errors %}has-danger{% else %} {% endif %}">
+                            <label class="col-xl-3 col-lg-3 col-form-label">
+                                {% if field.field.widget.input_type not in 'checkbox' %}
+                                    {% if field.field.required %}*{% endif %}
+                                    {{ field.label }}:
+                                {% endif %}
+                            </label>
+                            <div class="col-xl-9 col-lg-9">
+                                {% if field.field.widget.input_type not in 'checkbox' %}
+                                    {% render_field field|add_class:'form-control m-input' placeholder=field.label autocomplete="off" %}
+                                {% else %}
+                                    <div class="m-checkbox-inline">
+                                        <label class="m-checkbox m-checkbox--bold m-checkbox--state-brand">
+                                            {% render_field field %}
+                                            {{ field.label }}:
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                {% endif %}
+
+
+                                {% if field.help_text %}
+                                    <span class="m-form__help">{{ field.help_text }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+
+                    {% if form.non_field_errors %}
+                        <div class='form-group m-form__group has-danger'>
+                            {% for error in form.non_field_errors %}
+                                <div class="form-control-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</form>

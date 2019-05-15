@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Populate db with default objects'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(Command, self).__init__(*args, **kwargs)
 
     def add_arguments(self, parser):
         parser.add_argument('--groups')
@@ -17,8 +17,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if options['groups']:
-            default_roles = GROUPS
-            for role in default_roles:
+            for role in GROUPS:
                 group_model = apps.get_model('auth', 'Group')
                 # permissions = get_permitions(PERMISSIONS_BY_ROLES[role])
                 new_group, created = group_model.objects.get_or_create(name=role)
