@@ -47,6 +47,7 @@ class CreateUserForm(ModelForm):
     def save(self, commit=True):
         self.cleaned_data.update({'password': password.generator()})
         user = super(CreateUserForm, self).save(commit=False)
+        user.set_password(self.cleaned_data['password'])
         user.username = get_random_user(**self.cleaned_data)
         user.is_active = True
         return super(CreateUserForm, self).save()

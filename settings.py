@@ -53,7 +53,6 @@ EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = "hi@appname.com"
 
-DEBUG = False
 
 # https://beefree.io/templates/
 

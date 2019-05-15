@@ -30,12 +30,13 @@ class EventsToFormWithProcess {
 
     _onlyNumbers() {
         const $select = $('input.numeric');
-
-        $select.removeNumeric();
-        $select.numeric({
-            negative: false,
-            decimalPlaces: 2,
-        });
+        if ($select.length) {
+            $select.removeNumeric();
+            $select.numeric({
+                negative: false,
+                decimalPlaces: 2,
+            });
+        }
     }
 
     _addSelect2() {
