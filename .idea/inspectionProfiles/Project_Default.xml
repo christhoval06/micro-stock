@@ -4,10 +4,24 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="3">
+          <list size="17">
             <item index="0" class="java.lang.String" itemvalue="django-widget-tweaks" />
             <item index="1" class="java.lang.String" itemvalue="django-uni-form" />
             <item index="2" class="java.lang.String" itemvalue="helper" />
+            <item index="3" class="java.lang.String" itemvalue="hyperlink" />
+            <item index="4" class="java.lang.String" itemvalue="async-timeout" />
+            <item index="5" class="java.lang.String" itemvalue="twisted" />
+            <item index="6" class="java.lang.String" itemvalue="asgiref" />
+            <item index="7" class="java.lang.String" itemvalue="zope.interface" />
+            <item index="8" class="java.lang.String" itemvalue="automat" />
+            <item index="9" class="java.lang.String" itemvalue="incremental" />
+            <item index="10" class="java.lang.String" itemvalue="constantly" />
+            <item index="11" class="java.lang.String" itemvalue="attrs" />
+            <item index="12" class="java.lang.String" itemvalue="autobahn" />
+            <item index="13" class="java.lang.String" itemvalue="channels" />
+            <item index="14" class="java.lang.String" itemvalue="pyhamcrest" />
+            <item index="15" class="java.lang.String" itemvalue="txaio" />
+            <item index="16" class="java.lang.String" itemvalue="daphne" />
           </list>
         </value>
       </option>

@@ -12,7 +12,8 @@ handler500 = 'apps.utils.views.errors.handler500'
 url_platform = [
     path('', include('apps.home.urls')),
     path('auth/', include('apps.authentication.urls')),
-    path('user/', include('apps.user.urls'))
+    path('user/', include('apps.user.urls')),
+    path('company/', include('apps.company.urls'))
 ]
 
 urlpatterns = [

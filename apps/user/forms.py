@@ -7,10 +7,6 @@ from apps.utils.helpers import password
 from apps.utils.helpers.username import get_random_user
 
 
-class LoginForm(django_forms.AuthenticationForm):
-    pass
-
-
 class PasswordChangeForm(django_forms.PasswordChangeForm):
     pass
 

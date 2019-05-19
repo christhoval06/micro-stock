@@ -3,7 +3,7 @@ from functools import reduce
 
 this = sys.modules[__name__]
 
-MENU_FUNCS = ['_home', '_users', '_departments', '_products', '_customers', '_suppliers', '_stock', '_recipes',
+MENU_FUNCS = ['_home', '_users', '_company', '_products', '_customers', '_suppliers', '_stock', '_recipes',
               '_reports', '_settings']
 
 
@@ -65,11 +65,51 @@ def _users(request):
     ]
 
 
-def _departments(request):
+def _company(request):
     return [
         {
             'type': 'section',
+            'text': 'Companies',
+        },
+        {
+            'type': 'submenu',
+            'text': 'Companies',
+            'name': 'companies',
+            'icon': 'flaticon-truck',
+            'open': False,
+            'sub_menu': [
+                {
+                    'type': 'parent',
+                    'text': 'Companies',
+                },
+                {
+                    'type': 'item',
+                    'text': 'Create',
+                    'url': 'company_create',
+                    'name': 'company_create',
+                    'active': False,
+                },
+            ]
+        },
+        {
+            'type': 'submenu',
             'text': 'Departments',
+            'name': 'departments',
+            'icon': 'flaticon-squares-4',
+            'open': False,
+            'sub_menu': [
+                {
+                    'type': 'parent',
+                    'text': 'Departments',
+                },
+                {
+                    'type': 'item',
+                    'text': 'Create',
+                    'url': 'department_create',
+                    'name': 'department_create',
+                    'active': False,
+                },
+            ]
         },
     ]
 

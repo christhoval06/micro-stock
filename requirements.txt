@@ -12,10 +12,18 @@ https://control.divio.com/api/v1/apps/serve/aldryn-django/2.2.1.1/17e41177-1e0d-
 aldryn-sites==0.6.0
 https://control.divio.com/api/v1/apps/serve/aldryn-sso/1.6.0/6d90e844-d7ef-4faa-b527-5df3d49277be/aldryn-sso-1.6.0.tar.gz#egg=aldryn-sso==1.6.0
 argparse==1.4.0           # via djeese-fs
+asgiref==3.1.2            # via channels, daphne
+async-timeout==3.0.1      # via asgiref
+attrs==19.1.0             # via automat, twisted
+autobahn==19.5.1          # via daphne
+automat==0.7.0            # via twisted
 boto==2.48.0
 certifi==2019.3.9         # via djeese-fs, requests, sentry-sdk
+channels==2.2.0
 chardet==3.0.4            # via djeese-fs, requests
-click==7.0                # via aldryn-client
+click==7.0                # via aldryn-client, pip-tools
+constantly==15.1.0        # via twisted
+daphne==2.3.0             # via channels
 dj-database-url==0.5.0
 dj-email-url==0.2.0
 dj-redis-url==0.1.4
@@ -26,23 +34,30 @@ django-getenv==1.3.2
 django-simple-sso==0.14.0
 django-storages==1.7.1
 django-widget-tweaks==1.4.3
-django==2.2.1             # via aldryn-sites, django-appconf, django-simple-sso, django-storages, easy-thumbnails, webservices
+django==2.2.1             # via aldryn-sites, channels, django-appconf, django-simple-sso, django-storages, easy-thumbnails, webservices
 djeese-fs==0.1.21
 easy-thumbnails==2.6
 furl==2.0.0
-idna==2.8                 # via requests
+hyperlink==19.0.0         # via twisted
+idna==2.8                 # via hyperlink, requests
+incremental==17.5.0       # via twisted
 itsdangerous==1.1.0       # via django-simple-sso, webservices
 orderedmultidict==1.0     # via furl
 pillow==6.0.0             # via easy-thumbnails
+pip-tools==3.7.0
 psycopg2==2.8.2
+pyhamcrest==1.9.0         # via twisted
 pytz==2019.1
 requests==2.21.0          # via aldryn-client, webservices
 sentry-sdk==0.7.14
-six==1.12.0               # via aldryn-client, django-appconf, furl, orderedmultidict
+six==1.12.0               # via aldryn-client, autobahn, automat, django-appconf, furl, orderedmultidict, pip-tools, pyhamcrest, txaio
 sqlparse==0.3.0           # via django
 static3==0.7.0            # via dj-static
 tabulate==0.8.3           # via aldryn-client
+twisted==19.2.0           # via daphne
+txaio==18.8.1             # via autobahn
 urllib3==1.24.3           # via requests, sentry-sdk
 uwsgi==2.0.18
 webservices[django]==0.7  # via django-simple-sso
 yurl==1.0.0               # via aldryn-sites
+zope.interface==4.6.0     # via twisted

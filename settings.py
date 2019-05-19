@@ -26,10 +26,13 @@ LOGIN_URL = '/auth/login/'
 INSTALLED_APPS.extend([
     # add your project specific apps here
     'widget_tweaks',
+    'channels',
 
+    # 'apps.chat',
     'apps.authentication',
     'apps.user',
     'apps.home',
+    'apps.company',
 ])
 
 APP_NAME = 'Micro Stock'
@@ -53,6 +56,9 @@ EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = "hi@appname.com"
 
+# Channels Settings
+
+ASGI_APPLICATION = "routing.application"
 
 # https://beefree.io/templates/
 

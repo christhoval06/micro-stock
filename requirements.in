@@ -7,3 +7,4 @@ https://control.divio.com/api/v1/apps/serve/aldryn-sso/1.6.0/6d90e844-d7ef-4faa-
 pytz
 django-widget-tweaks
 pip_tools
+channels

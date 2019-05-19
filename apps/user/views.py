@@ -23,7 +23,7 @@ class CreateUserView(WithEmailMixin, CreateView):
         ctx = super().get_context_data(**kwargs)
         if 'invalid' not in ctx:
             ctx.update({
-                'title': 'User Create',
+                'title': _('User Creation'),
             })
         return ctx
 
