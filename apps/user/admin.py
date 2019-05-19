@@ -7,5 +7,5 @@ from . import models
 class ClientAdmin(admin.ModelAdmin):
     filter_horizontal = ('groups', 'user_permissions')
     search_fields = ['username', 'first_name', 'last_name', 'email']
-    list_display = ['username', 'first_name', 'last_name', 'email', 'date_joined']
-    ordering = ['username']
+    list_display = ['username', 'first_name', 'last_name', 'company', 'date_joined']
+    ordering = ['username', 'company']
