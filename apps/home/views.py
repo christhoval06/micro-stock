@@ -11,15 +11,5 @@ class HomeView(TemplateView):
         ctx = super(HomeView, self).get_context_data(**kwargs)
         ctx.update({
             'title': 'Dashboard',
-            'subheader_title': 'Home',
-            'breadcrumbs': [
-                {
-                    'text': 'Name',
-                    'url': 'home:index',
-                },
-                {
-                    'text': 'Current',
-                }
-            ]
         })
         return ctx

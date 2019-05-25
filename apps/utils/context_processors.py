@@ -2,6 +2,7 @@ import sys
 from functools import reduce
 
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 this = sys.modules[__name__]
 
@@ -13,8 +14,7 @@ def _home(request):
     return [
         {
             'type': 'item',
-            'name': 'home',
-            'text': 'Dashboard',
+            'text': _('Dashboard'),
             'icon': 'flaticon-line-graph',
             'badge': 2,
             'url': 'home:index',
@@ -27,40 +27,40 @@ def _users(request):
     return [
         {
             'type': 'section',
-            'text': 'Users',
+            'text': _('Users'),
         },
         {
             'type': 'submenu',
-            'text': 'Users',
+            'text': _('Users'),
             'name': 'user',
             'icon': 'flaticon-users',
             'open': False,
             'sub_menu': [
                 {
                     'type': 'parent',
-                    'text': 'Users',
+                    'text': _('Users'),
                 },
                 {
                     'type': 'item',
-                    'text': 'List',
+                    'text': _('List'),
                     'url': 'user:index',
                     'active': False,
                 },
                 {
                     'type': 'item',
-                    'text': 'Create',
+                    'text': _('Create'),
                     'url': 'user:create',
                     'active': False,
                 },
                 {
                     'type': 'submenu',
-                    'text': 'Sub Menu',
+                    'text': _('Sub Menu'),
                     'name': 'submenu',
                     'active': False,
                     'sub_menu': [
                         {
                             'type': 'item',
-                            'text': 'State Colors',
+                            'text': _('State Colors'),
                             'url': 'home:index',
                             'active': False,
                         },
@@ -75,28 +75,28 @@ def _company(request):
     return [
         {
             'type': 'section',
-            'text': 'Companies',
+            'text': _('Companies'),
         },
         {
             'type': 'submenu',
-            'text': 'Companies',
+            'text': _('Companies'),
             'name': 'company',
             'icon': 'flaticon-truck',
             'open': False,
             'sub_menu': [
                 {
                     'type': 'parent',
-                    'text': 'Companies',
+                    'text': _('Companies'),
                 },
                 {
                     'type': 'item',
-                    'text': 'List',
+                    'text': _('List'),
                     'url': 'company:index',
                     'active': False,
                 },
                 {
                     'type': 'item',
-                    'text': 'Create',
+                    'text': _('Create'),
                     'url': 'company:create',
                     'active': False,
                 },
@@ -104,24 +104,24 @@ def _company(request):
         },
         {
             'type': 'submenu',
-            'text': 'Departments',
+            'text': _('Departments'),
             'name': 'company:department',
             'icon': 'flaticon-squares-4',
             'open': False,
             'sub_menu': [
                 {
                     'type': 'parent',
-                    'text': 'Departments',
+                    'text': _('Departments'),
                 },
                 {
                     'type': 'item',
-                    'text': 'List',
+                    'text': _('List'),
                     'url': 'company:department:index',
                     'active': False,
                 },
                 {
                     'type': 'item',
-                    'text': 'Create',
+                    'text': _('Create'),
                     'url': 'company:department:create',
                     'active': False,
                 },
@@ -134,7 +134,7 @@ def _products(request):
     return [
         {
             'type': 'section',
-            'text': 'Products',
+            'text': _('Products'),
         },
     ]
 
@@ -143,7 +143,7 @@ def _stock(request):
     return [
         {
             'type': 'section',
-            'text': 'Stock',
+            'text': _('Stock'),
         },
     ]
 
@@ -152,7 +152,7 @@ def _recipes(request):
     return [
         {
             'type': 'section',
-            'text': 'Recipes',
+            'text': _('Recipes'),
         },
     ]
 
@@ -161,7 +161,7 @@ def _customers(request):
     return [
         {
             'type': 'section',
-            'text': 'Customers',
+            'text': _('Customers'),
         },
     ]
 
@@ -170,7 +170,7 @@ def _suppliers(request):
     return [
         {
             'type': 'section',
-            'text': 'Suppliers',
+            'text': _('Suppliers'),
         },
     ]
 
@@ -179,7 +179,7 @@ def _reports(request):
     return [
         {
             'type': 'section',
-            'text': 'Reports',
+            'text': _('Reports'),
         },
     ]
 
@@ -188,7 +188,7 @@ def _settings(request):
     return [
         {
             'type': 'section',
-            'text': 'Settings',
+            'text': _('Settings'),
         },
     ]
 
@@ -242,7 +242,22 @@ def breadcrumbs(request):
     print('url_name', resolver.url_name, resolver.view_name)
 
     _menu_ = _iterate_menu(request)
-    _section_ = list(filter(lambda i: i['type'] == 'submenu' and i['open'], _menu_))[0]
+    _section_ = list(filter(lambda i: i['type'] == 'submenu' and i['open'], _menu_))
+    if len(_section_) == 0:
+        return {
+            'subheader_title': _('Dashboard'),
+            'breadcrumbs': [
+                {
+                    'text': _('Dashboard'),
+                    'url': 'home:index',
+                },
+                {
+                    'text': _('Index'),
+                }
+            ]
+        }
+
+    _section_ = _section_[0]
     _item_ = list(filter(lambda i: i['type'] == 'item' and i['active'], _section_['sub_menu']))[0]
 
     print('_section_', _section_)
