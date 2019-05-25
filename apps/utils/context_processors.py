@@ -209,6 +209,9 @@ def _iterate_menu(request, items=None):
 
 
 def menu(request):
+    if not request.user.is_authenticated:
+        return {}
+
     return {
         'app_name': settings.APP_NAME,
         'menu': _iterate_menu(request),
@@ -230,6 +233,9 @@ def menu(request):
 
 
 def breadcrumbs(request):
+    if not request.user.is_authenticated:
+        return {}
+
     resolver = request.resolver_match
     print('resolver', resolver.__dict__)
     print('resolver.func', resolver.func.view_class.__dict__)
