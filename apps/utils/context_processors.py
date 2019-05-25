@@ -235,11 +235,11 @@ def menu(request):
 def breadcrumbs(request):
     if not request.user.is_authenticated:
         return {}
-
-    resolver = request.resolver_match
-    print('resolver', resolver.__dict__)
-    print('resolver.func', resolver.func.view_class.__dict__)
-    print('url_name', resolver.url_name, resolver.view_name)
+    #
+    # resolver = request.resolver_match
+    # print('resolver', resolver.__dict__)
+    # print('resolver.func', resolver.func.view_class.__dict__)
+    # print('url_name', resolver.url_name, resolver.view_name)
 
     _menu_ = _iterate_menu(request)
     _section_ = list(filter(lambda i: i['type'] == 'submenu' and i['open'], _menu_))
@@ -260,8 +260,6 @@ def breadcrumbs(request):
     _section_ = _section_[0]
     _item_ = list(filter(lambda i: i['type'] == 'item' and i['active'], _section_['sub_menu']))[0]
 
-    print('_section_', _section_)
-    print('_item_', _item_)
     return {
         'subheader_title': _section_['text'],
         'breadcrumbs': [
