@@ -17,9 +17,9 @@ SECRET_KEY = 'x^w*wyhyh5%1$%l@=5wa^56_+omn)b!-m9*+=uy0!%@!%ej0gy'
 
 AUTH_USER_MODEL = 'user.User'
 
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home:index'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'home:index'
 LOGIN_URL = '/auth/login/'
 
 INSTALLED_APPS.extend([
@@ -28,6 +28,8 @@ INSTALLED_APPS.extend([
     'channels',
 
     # 'apps.chat',
+    # 'apps.menu',
+    'apps.utils',
     'apps.authentication',
     'apps.user',
     'apps.home',
@@ -38,6 +40,7 @@ APP_NAME = 'Micro Stock'
 
 TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'apps.utils.context_processors.menu',
+    'apps.utils.context_processors.breadcrumbs',
 ])
 
 # Internationalization
@@ -58,6 +61,10 @@ DEFAULT_FROM_EMAIL = "hi@appname.com"
 # Channels Settings
 
 ASGI_APPLICATION = "routing.application"
+
+# TEMPLATES
+DEVELOPER_NAME = '@christhoval'
+DEVELOPER_SITE = 'https:christhoval.xyz'
 
 # https://beefree.io/templates/
 

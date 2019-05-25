@@ -539,6 +539,7 @@
                             "{$config.path.src}/js/framework/base/util.js",
                             "{$config.path.src}/js/framework/base/app.js",
                             "{$config.path.src}/js/framework/components/general/datatable/datatable.js",
+                            "{$config.path.src}/js/framework/components/web/**/*.js",
                             "{$config.path.src}/js/framework/components/general/**/*.js",
                             "{$config.path.src}/js/demo/default/base/**/*.js",
                             "{$config.path.src}/js/app/base/**/*.js",

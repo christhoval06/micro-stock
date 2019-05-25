@@ -1,0 +1,11 @@
+<div class="m-alert {% if alert_icon %}m-alert--icon{% endif %} m-alert--air m-alert--square alert alert-dismissible m--margin-bottom-30"
+     role="alert">
+    {% if alert_icon %}
+        <div class="m-alert__icon">
+            <i class="{{ alert_icon }} m--font-brand"></i>
+        </div>
+    {% endif %}
+    <div class="m-alert__text">
+        {{ alert_text }}
+    </div>
+</div>

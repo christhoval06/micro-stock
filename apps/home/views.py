@@ -15,7 +15,7 @@ class HomeView(TemplateView):
             'breadcrumbs': [
                 {
                     'text': 'Name',
-                    'url': 'home',
+                    'url': 'home:index',
                 },
                 {
                     'text': 'Current',
