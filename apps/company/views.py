@@ -4,16 +4,16 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from apps.utils.views.list import ListView
-from .forms import CreateDepartmentForm, CreateCompanyForm
+from .forms import CreateDepartmentForm, CompanyCreateForm
 from .models import Company, Department
 
 
 @method_decorator(login_required, name='dispatch')
 class CompanyCreateView(CreateView):
-    form_class = CreateCompanyForm
+    form_class = CompanyCreateForm
     template_name = 'company/create.html'
     success_url = reverse_lazy('company:index')
 
@@ -22,6 +22,22 @@ class CompanyCreateView(CreateView):
         if 'invalid' not in ctx:
             ctx.update({
                 'title': _('Company Creation'),
+            })
+        return ctx
+
+
+@method_decorator(login_required, name='dispatch')
+class CompanyUpdateView(UpdateView):
+    form_class = CompanyCreateForm
+    template_name = 'company/create.html'
+    success_url = reverse_lazy('company:index')
+    model = Company
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if 'invalid' not in ctx:
+            ctx.update({
+                'title': _('Company Update'),
             })
         return ctx
 
@@ -37,6 +53,22 @@ class DepartmentCreateView(CreateView):
         if 'invalid' not in ctx:
             ctx.update({
                 'title': _('Department Creation'),
+            })
+        return ctx
+
+
+@method_decorator(login_required, name='dispatch')
+class DepartmentUpdateView(UpdateView):
+    form_class = CompanyCreateForm
+    template_name = 'company/create.html'
+    success_url = reverse_lazy('company:department:index')
+    model = Department
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if 'invalid' not in ctx:
+            ctx.update({
+                'title': _('Department Update'),
             })
         return ctx
 
@@ -82,21 +114,26 @@ class CompanyListView(ListView):
                 <i class="la la-ellipsis-h"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
-                <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
-                <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
+                <a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>
+                <!-- <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
             </div>
         </span>
-        <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="View">
+        <a href="{}" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="{}">
             <i class="la la-edit"></i>
-        </a>''')
+        </a>'''.format(
+            reverse_lazy('company:edit', kwargs={'pk': company.pk}),
+            _('Edit Details'),
+            reverse_lazy('company:edit', kwargs={'pk': company.pk}),
+            _('Edit')
+        ))
 
     actions.short_description = _('Actions')
 
     def get_context_data(self, **kwargs):
         kwargs.update({
             'title': _('Companies'),
-            'alert': True,
+            'alert': False,
             'alert_text': mark_safe('''Each column has an optional rendering control called columns.
              render which can be used to process the content of each cell before the data is used. 
              See official documentation <a href="{}" target="_blank">here</a>.'''.format('#')),
@@ -163,21 +200,26 @@ class DepartmentListView(ListView):
                 <i class="la la-ellipsis-h"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
-                <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
-                <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
+                <a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>
+                <!-- <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
             </div>
         </span>
-        <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="View">
+        <a href="{}" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="{}">
             <i class="la la-edit"></i>
-        </a>''')
+        </a>'''.format(
+            reverse_lazy('company:department:edit', kwargs={'pk': department.pk}),
+            _('Edit Details'),
+            reverse_lazy('company:department:edit', kwargs={'pk': department.pk}),
+            _('Edit')
+        ))
 
     actions.short_description = _('Actions')
 
     def get_context_data(self, **kwargs):
         kwargs.update({
             'title': _('Departments'),
-            'alert': True,
+            'alert': False,
             'alert_text': mark_safe('''Each column has an optional rendering control called columns.
              render which can be used to process the content of each cell before the data is used. 
              See official documentation <a href="{}" target="_blank">here</a>.'''.format('#')),

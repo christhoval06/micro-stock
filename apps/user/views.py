@@ -4,17 +4,17 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from apps.utils.views.list import ListView
 from apps.utils.views.with_email import WithEmailMixin
-from .forms import CreateUserForm
+from .forms import UserCreateForm, UserUpdateForm, GeneratePasswordForm
 from .models import User
 
 
 @method_decorator(login_required, name='dispatch')
 class UserCreateView(WithEmailMixin, CreateView):
-    form_class = CreateUserForm
+    form_class = UserCreateForm
     template_name = 'user/create.html'
     success_url = reverse_lazy('user:index')
     form_data = None
@@ -24,18 +24,70 @@ class UserCreateView(WithEmailMixin, CreateView):
     email_template = "emails/welcome.txt"
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        if 'invalid' not in ctx:
-            ctx.update({
-                'title': _('User Creation'),
-            })
-        return ctx
+        kwargs.update({
+            'title': _('User Creation'),
+            'save_message': _('Save New user')
+        })
+        return super().get_context_data(**kwargs)
 
     def get_email_context_data(self, **kwargs):
         kwargs.update({
             'created_user': self.object,
             'form_data': self.form_data,
-            'message': _('Welcome')
+            'message': _('Welcome'),
+            'action_url': reverse_lazy('authentication: login'),
+            'action_text': _('Sign In')
+        })
+        return super().get_email_context_data(**kwargs)
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        self.form_data = form.cleaned_data
+        self.send_email(to=self.object.email)
+        return r
+
+
+@method_decorator(login_required, name='dispatch')
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = 'user/create.html'
+    success_url = reverse_lazy('user:index')
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'title': _('User Update'),
+            'save_message': _('Update current user')
+        })
+        return super().get_context_data(**kwargs)
+
+
+@method_decorator(login_required, name='dispatch')
+class UserGeneratePasswordView(WithEmailMixin, UpdateView):
+    form_class = GeneratePasswordForm
+    template_name = 'user/generate_password.html'
+    success_url = reverse_lazy('user:index')
+    form_data = None
+    model = User
+
+    email_html_template = "emails/generate_password.html"
+    email_subject_template = "emails/generate_password_subject.txt"
+    email_template = "emails/generate_password.txt"
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'title': _('Password Generate'),
+            'save_message': _('Do wish you generate a new password to this user?')
+        })
+        return super().get_context_data(**kwargs)
+
+    def get_email_context_data(self, **kwargs):
+        kwargs.update({
+            'created_user': self.object,
+            'form_data': self.form_data,
+            'message': _('Password Generated'),
+            'action_url': reverse_lazy('authentication:login'),
+            'action_text': _('Sign In')
         })
         return super().get_email_context_data(**kwargs)
 
@@ -104,21 +156,27 @@ class UserListView(ListView):
                 <i class="la la-ellipsis-h"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
-                <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
-                <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
+                <a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>
+                <!-- <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a> -->
+                <a class="dropdown-item" href="{}"><i class="la la-print"></i> {}</a>
             </div>
         </span>
-        <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="View">
+        <a href="{}" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit">
             <i class="la la-edit"></i>
-        </a>''')
+        </a>'''.format(
+            reverse_lazy('user:edit', kwargs={'pk': user.pk}),
+            _('Edit Details'),
+            reverse_lazy('user:generate_password', kwargs={'pk': user.pk}),
+            _('Generate Password'),
+            reverse_lazy('user:edit', kwargs={'pk': user.pk}),
+        ))
 
     actions.short_description = _('Actions')
 
     def get_context_data(self, **kwargs):
         kwargs.update({
             'title': _('Users'),
-            'alert': True,
+            'alert': False,
             'alert_text': mark_safe('''Each column has an optional rendering control called columns.
              render which can be used to process the content of each cell before the data is used. 
              See official documentation <a href="{}" target="_blank">here</a>.'''.format('#')),

@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from . import models
 
 
-class CreateCompanyForm(ModelForm):
+class CompanyForm(ModelForm):
     layouts = [
         {
             'title': _('Company Details'),
@@ -16,18 +16,24 @@ class CreateCompanyForm(ModelForm):
         }
     ]
 
+    required_fields = ['name']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.set_fields_required()
+        self.set_required_fields()
 
     class Meta:
         model = models.Company
         fields = ['name', 'is_active', ]
 
-    def set_fields_required(self):
-        for field in ['name']:
+    def set_required_fields(self):
+        for field in self.required_fields:
             self.fields[field].required = True
+
+
+class CompanyCreateForm(CompanyForm):
+    pass
 
 
 class CreateDepartmentForm(ModelForm):
@@ -45,12 +51,12 @@ class CreateDepartmentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.set_fields_required()
+        self.set_required_fields()
 
     class Meta:
         model = models.Department
         fields = ['name', 'company', 'is_active', ]
 
-    def set_fields_required(self):
+    def set_required_fields(self):
         for field in ['name', 'company']:
             self.fields[field].required = True

@@ -11,7 +11,7 @@ class PasswordChangeForm(django_forms.PasswordChangeForm):
     pass
 
 
-class CreateUserForm(ModelForm):
+class UserForm(ModelForm):
     layouts = [
         {
             'title': _('User Details'),
@@ -22,28 +22,55 @@ class CreateUserForm(ModelForm):
             'fields': ['email']
         },
         {
+            'title': _('Company Settings'),
+            'fields': ['company']
+        },
+        {
             'title': _('Client Settings'),
             'fields': ['groups']
         }
     ]
 
-    def __init__(self, *args, **kwargs):
-        super(CreateUserForm, self).__init__(*args, **kwargs)
+    required_fields = ['first_name', 'last_name', 'email', 'groups', 'company']
 
-        self.set_fields_required()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.set_required_fields()
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'groups', ]
+        fields = ['first_name', 'last_name', 'email', 'groups', 'company']
 
-    def set_fields_required(self):
-        for field in ['first_name', 'last_name', 'email', 'groups', ]:
+    def set_required_fields(self):
+        for field in self.required_fields:
             self.fields[field].required = True
 
+
+class UserCreateForm(UserForm):
     def save(self, commit=True):
         self.cleaned_data.update({'password': password.generator()})
-        user = super(CreateUserForm, self).save(commit=False)
+        user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
         user.username = get_random_user(**self.cleaned_data)
         user.is_active = True
-        return super(CreateUserForm, self).save()
+        return super().save()
+
+
+class UserUpdateForm(UserForm):
+    pass
+
+
+class GeneratePasswordForm(UserForm):
+    layouts = []
+    required_fields = []
+
+    class Meta(UserForm.Meta):
+        fields = []
+
+    def save(self, commit=True):
+        self.cleaned_data.update({'password': password.generator()})
+        user = super().save(False)
+        user.set_password(self.cleaned_data['password'])
+        user.save()
+        return user

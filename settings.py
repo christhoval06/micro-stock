@@ -40,7 +40,7 @@ APP_NAME = 'Micro Stock'
 
 TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'apps.utils.context_processors.menu',
-    'apps.utils.context_processors.breadcrumbs',
+    # 'apps.utils.context_processors.breadcrumbs',
 ])
 
 # Internationalization

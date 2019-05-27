@@ -40,7 +40,9 @@ class EventsToFormWithProcess {
     }
 
     _addSelect2() {
-        $("select").select2();
+        $("select").select2({
+            closeOnSelect: true
+        });
     }
 
     _showDialog() {
