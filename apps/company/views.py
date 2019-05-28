@@ -1,5 +1,5 @@
 import six
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
@@ -12,6 +12,7 @@ from .models import Company, Department
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('company.change_company', 'home:index'), name='dispatch')
 class CompanyCreateView(CreateView):
     form_class = CompanyCreateForm
     template_name = 'company/create.html'
@@ -27,6 +28,7 @@ class CompanyCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('company.change_company', 'home:index'), name='dispatch')
 class CompanyUpdateView(UpdateView):
     form_class = CompanyCreateForm
     template_name = 'company/create.html'
@@ -43,6 +45,7 @@ class CompanyUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('company.add_department', 'home:index'), name='dispatch')
 class DepartmentCreateView(CreateView):
     form_class = CreateDepartmentForm
     template_name = 'company/create.html'
@@ -58,6 +61,7 @@ class DepartmentCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('company.change_department', 'home:index'), name='dispatch')
 class DepartmentUpdateView(UpdateView):
     form_class = CompanyCreateForm
     template_name = 'company/create.html'
@@ -74,6 +78,7 @@ class DepartmentUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('company.can_view_companies', 'home:index'), name='dispatch')
 class CompanyListView(ListView):
     list_display = ['name', 'status', 'created', 'actions']
     template_name = 'company/company_list.html'
@@ -108,24 +113,34 @@ class CompanyListView(ListView):
     created.orderable = True
 
     def actions(self, company):
+        if not self.request.user.has_any_perms('company.add_company', 'company.add_department'):
+            return ''
         return mark_safe('''
-        <span class="dropdown">
-            <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
-                <i class="la la-ellipsis-h"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>
-                <!-- <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
-            </div>
-        </span>
-        <a href="{}" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="{}">
-            <i class="la la-edit"></i>
-        </a>'''.format(
-            reverse_lazy('company:edit', kwargs={'pk': company.pk}),
-            _('Edit Details'),
-            reverse_lazy('company:edit', kwargs={'pk': company.pk}),
-            _('Edit')
+                <span class="dropdown">
+                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                        <i class="la la-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        {}
+                    </div>
+                </span>'''.format(
+            *list(map(lambda e: e[1] if e[0](self.request) else '',
+                      [
+                          # (
+                          #     lambda req: req.user.has_perm('company.update_department'),
+                          #     '<a class="dropdown-item" href="{}"><i class="la la-plus"></i> {}</a>'.format(
+                          #         reverse_lazy('company:department:create', kwargs={'pk': company.pk}),
+                          #         _('Add Department')
+                          #     )
+                          # ),
+                          (
+                              lambda req: req.user.has_perm('company.change_company'),
+                              '<a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>'.format(
+                                  reverse_lazy('company:edit', kwargs={'pk': company.pk}),
+                                  _('Edit Details')
+                              )
+                          )
+                      ]))
         ))
 
     actions.short_description = _('Actions')
@@ -138,6 +153,7 @@ class CompanyListView(ListView):
              render which can be used to process the content of each cell before the data is used. 
              See official documentation <a href="{}" target="_blank">here</a>.'''.format('#')),
             'alert_icon': 'flaticon-exclamation',
+            'add_visible': self.request.user.has_perm('company.add_company'),
             'add_title': _('Add Company'),
             'add_url': 'company:create'
         })
@@ -154,6 +170,7 @@ class CompanyListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('company.can_view_departments', 'home:index'), name='dispatch')
 class DepartmentListView(ListView):
     list_display = ['name', 'company', 'status', 'created', 'actions']
     template_name = 'company/company_list.html'
@@ -194,24 +211,28 @@ class DepartmentListView(ListView):
     created.orderable = True
 
     def actions(self, department):
+
+        if not self.request.user.has_any_perms('company.change_department'):
+            return ''
         return mark_safe('''
-        <span class="dropdown">
-            <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
-                <i class="la la-ellipsis-h"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>
-                <!-- <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
-            </div>
-        </span>
-        <a href="{}" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="{}">
-            <i class="la la-edit"></i>
-        </a>'''.format(
-            reverse_lazy('company:department:edit', kwargs={'pk': department.pk}),
-            _('Edit Details'),
-            reverse_lazy('company:department:edit', kwargs={'pk': department.pk}),
-            _('Edit')
+                <span class="dropdown">
+                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                        <i class="la la-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        {}
+                    </div>
+                </span>'''.format(
+            *list(map(lambda e: e[1] if e[0](self.request) else '',
+                      [
+                          (
+                              lambda req: req.user.has_perm('company.change_department'),
+                              '<a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>'.format(
+                                  reverse_lazy('company:department:edit', kwargs={'pk': department.pk}),
+                                  _('Edit Details')
+                              )
+                          )
+                      ]))
         ))
 
     actions.short_description = _('Actions')
@@ -224,6 +245,7 @@ class DepartmentListView(ListView):
              render which can be used to process the content of each cell before the data is used. 
              See official documentation <a href="{}" target="_blank">here</a>.'''.format('#')),
             'alert_icon': 'flaticon-exclamation',
+            'add_visible': self.request.user.has_perm('company.add_department'),
             'add_title': _('Add Department'),
             'add_url': 'company:department:create'
         })

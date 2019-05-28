@@ -18,7 +18,8 @@ def _home(request):
             'icon': 'flaticon-line-graph',
             'badge': 2,
             'url': 'home:index',
-            'active': False
+            'active': False,
+            'check': lambda req: req.user.has_perm('home.can_view_dashboard')
         },
     ]
 
@@ -28,6 +29,7 @@ def _users(request):
         {
             'type': 'section',
             'text': _('Users'),
+            'check': lambda req: req.user.has_any_perms('user.can_view_users', 'user.can_add'),
         },
         {
             'type': 'submenu',
@@ -35,36 +37,26 @@ def _users(request):
             'name': 'user',
             'icon': 'flaticon-users',
             'open': False,
+            'check': lambda req: req.user.has_any_perms('user.can_view_users', 'user.add_user'),
             'sub_menu': [
                 {
                     'type': 'parent',
                     'text': _('Users'),
+                    'visible': True,
                 },
                 {
                     'type': 'item',
                     'text': _('List'),
                     'url': 'user:index',
                     'active': False,
+                    'check': lambda req: req.user.has_perm('user.can_view_users'),
                 },
                 {
                     'type': 'item',
                     'text': _('Create'),
                     'url': 'user:create',
                     'active': False,
-                },
-                {
-                    'type': 'submenu',
-                    'text': _('Sub Menu'),
-                    'name': 'submenu',
-                    'active': False,
-                    'sub_menu': [
-                        {
-                            'type': 'item',
-                            'text': _('State Colors'),
-                            'url': 'home:index',
-                            'active': False,
-                        },
-                    ]
+                    'check': lambda req: req.user.has_perm('user.add_user'),
                 },
             ]
         },
@@ -76,6 +68,8 @@ def _company(request):
         {
             'type': 'section',
             'text': _('Companies'),
+            'check': lambda req: req.user.has_any_perms('company.can_view_companies', 'company.add_company',
+                                                        'company.can_view_departments', 'company.add_department')
         },
         {
             'type': 'submenu',
@@ -83,6 +77,7 @@ def _company(request):
             'name': 'company',
             'icon': 'flaticon-truck',
             'open': False,
+            'check': lambda req: req.user.has_any_perms('company.can_view_companies', 'company.add_company'),
             'sub_menu': [
                 {
                     'type': 'parent',
@@ -93,12 +88,14 @@ def _company(request):
                     'text': _('List'),
                     'url': 'company:index',
                     'active': False,
+                    'check': lambda req: req.user.has_perm('company.can_view_companies'),
                 },
                 {
                     'type': 'item',
                     'text': _('Create'),
                     'url': 'company:create',
                     'active': False,
+                    'check': lambda req: req.user.has_perm('company.add_company'),
                 },
             ]
         },
@@ -108,22 +105,26 @@ def _company(request):
             'name': 'company:department',
             'icon': 'flaticon-squares-4',
             'open': False,
+            'check': lambda req: req.user.has_any_perms('company.can_view_departments', 'company.add_department'),
             'sub_menu': [
                 {
                     'type': 'parent',
                     'text': _('Departments'),
+                    'visible': True,
                 },
                 {
                     'type': 'item',
                     'text': _('List'),
                     'url': 'company:department:index',
                     'active': False,
+                    'check': lambda req: req.user.has_perm('company.can_view_departments'),
                 },
                 {
                     'type': 'item',
                     'text': _('Create'),
                     'url': 'company:department:create',
                     'active': False,
+                    'check': lambda req: req.user.has_perm('company.add_department'),
                 },
             ]
         },
@@ -199,6 +200,11 @@ def _map_menu_item(request, item):
         item['sub_menu'] = list(_iterate_menu(request, item['sub_menu']))
     elif item['type'] in ['item']:
         item['active'] = request.resolver_match.view_name == item['url']
+
+    check_func = item.get('check', None)
+    if callable(check_func):
+        item['visible'] = check_func(request)
+
     return item
 
 

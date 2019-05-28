@@ -1,5 +1,5 @@
 import six
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
@@ -13,6 +13,7 @@ from .models import User
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('user.add_user', 'home:index'), name='dispatch')
 class UserCreateView(WithEmailMixin, CreateView):
     form_class = UserCreateForm
     template_name = 'user/create.html'
@@ -48,6 +49,7 @@ class UserCreateView(WithEmailMixin, CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('user.change_user', 'home:index'), name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
     form_class = UserUpdateForm
@@ -63,6 +65,7 @@ class UserUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('user.can_generate_password', 'home:index'), name='dispatch')
 class UserGeneratePasswordView(WithEmailMixin, UpdateView):
     form_class = GeneratePasswordForm
     template_name = 'user/generate_password.html'
@@ -87,7 +90,7 @@ class UserGeneratePasswordView(WithEmailMixin, UpdateView):
             'form_data': self.form_data,
             'message': _('Password Generated'),
             'action_url': reverse_lazy('authentication:login'),
-            'action_text': _('Sign In')
+            'action_text': _('Sign In'),
         })
         return super().get_email_context_data(**kwargs)
 
@@ -99,6 +102,7 @@ class UserGeneratePasswordView(WithEmailMixin, UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('user.can_view_users', 'home:index'), name='dispatch')
 class UserListView(ListView):
     list_display = ['name', 'email', 'status', 'created', 'actions']
     template_name = 'user/user_list.html'
@@ -150,25 +154,34 @@ class UserListView(ListView):
     created.orderable = True
 
     def actions(self, user):
+        if not self.request.user.has_any_perms('user.can_generate_password', 'user.change_user'):
+            return ''
         return mark_safe('''
         <span class="dropdown">
             <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                 <i class="la la-ellipsis-h"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>
-                <!-- <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a> -->
-                <a class="dropdown-item" href="{}"><i class="la la-print"></i> {}</a>
+                {}
             </div>
-        </span>
-        <a href="{}" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit">
-            <i class="la la-edit"></i>
-        </a>'''.format(
-            reverse_lazy('user:edit', kwargs={'pk': user.pk}),
-            _('Edit Details'),
-            reverse_lazy('user:generate_password', kwargs={'pk': user.pk}),
-            _('Generate Password'),
-            reverse_lazy('user:edit', kwargs={'pk': user.pk}),
+        </span>'''.format(
+            *list(map(lambda e: e[1] if e[0](self.request) else '',
+                      [
+                          (
+                              lambda req: req.user.has_perm('user.change_user'),
+                              '<a class="dropdown-item" href="{}"><i class="la la-edit"></i> {}</a>'.format(
+                                  reverse_lazy('user:edit', kwargs={'pk': user.pk}),
+                                  _('Edit Details')
+                              )
+                          ),
+                          (
+                              lambda req: req.user.has_perm('user.can_generate_password'),
+                              '<a class="dropdown-item" href="{}"><i class="la la-print"></i> {}</a>'.format(
+                                  reverse_lazy('user:generate_password', kwargs={'pk': user.pk}),
+                                  _('Generate Password')
+                              )
+                          )
+                      ]))
         ))
 
     actions.short_description = _('Actions')
@@ -180,7 +193,10 @@ class UserListView(ListView):
             'alert_text': mark_safe('''Each column has an optional rendering control called columns.
              render which can be used to process the content of each cell before the data is used. 
              See official documentation <a href="{}" target="_blank">here</a>.'''.format('#')),
-            'alert_icon': 'flaticon-exclamation'
+            'alert_icon': 'flaticon-exclamation',
+            'add_visible': self.request.user.has_perm('user.add_user'),
+            'add_title': _('Add User'),
+            'add_url': 'user:create'
         })
         return super().get_context_data(**kwargs)
 

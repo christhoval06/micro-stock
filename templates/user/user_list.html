@@ -91,16 +91,18 @@
             </div>
             <div class="m-portlet__head-tools">
                 <ul class="m-portlet__nav">
-                    <li class="m-portlet__nav-item">
-                        <a href="{% url 'user:create' %}"
-                           class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                    {% if add_visible %}
+                        <li class="m-portlet__nav-item">
+                            <a href="{% url add_url %}"
+                               class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                             <span>
                                 <i class="la la-plus"></i>
-                                <span>{% trans 'Add User' %}</span>
+                                <span>{% trans add_title %}</span>
                             </span>
-                        </a>
-                    </li>
-                    <li class="m-portlet__nav-item"></li>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item"></li>
+                    {% endif %}
                     <li class="m-portlet__nav-item">
                         <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push"
                              m-dropdown-toggle="hover" aria-expanded="true">

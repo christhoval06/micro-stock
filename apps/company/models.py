@@ -5,6 +5,10 @@ from apps.utils import models as utils_models
 
 
 class Company(utils_models.WithTimeStamp, models.Model):
+    class Meta:
+        permissions = [('can_view_companies', 'Can view companies'),
+                       ('can_assign_company', 'Can assign company')]
+
     name = models.CharField(
         _('Name'),
         max_length=150,
@@ -31,6 +35,9 @@ class WithCompany(models.Model):
 
 
 class Department(WithCompany, utils_models.WithTimeStamp, models.Model):
+    class Meta:
+        permissions = [('can_view_departments', 'Can view departments'), ]
+
     name = models.CharField(
         _('Name'),
         max_length=150,

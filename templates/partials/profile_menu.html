@@ -104,19 +104,22 @@
                                 </a>
                             </li>
                         {% endif %}
-                        <li class="m-nav__item">
-                            <a href="{% url 'admin:index' %}" class="m-nav__link">
-                                <i class="m-nav__link-icon flaticon-profile"></i>
-                                <span class="m-nav__link-text">
+                        {% if user.is_superuser %}
+                            <li class="m-nav__item">
+                                <a href="{% url 'admin:index' %}" class="m-nav__link">
+                                    <i class="m-nav__link-icon flaticon-profile"></i>
+                                    <span class="m-nav__link-text">
 																											{% trans 'Admin' %}
 																										</span>
-                            </a>
-                        </li>
-                        <li class="m-nav__separator m-nav__separator--fit"></li>
+                                </a>
+                            </li>
+
+                            <li class="m-nav__separator m-nav__separator--fit"></li>
+                        {% endif %}
                         <li class="m-nav__item">
                             <a href="{% url 'authentication:logout' %}"
                                class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
-                                Logout
+                                {% trans 'Logout' %}
                             </a>
                         </li>
                     </ul>

@@ -74,3 +74,5 @@ DEVELOPER_SITE = 'https:christhoval.xyz'
 # https://github.com/melizalab/django-lab-inventory/blob/master/inventory/models.py
 
 # http://www.chrisumbel.com/article/django_python_stored_procedures.aspx
+
+# https://djangobook.com/mdj2-django-admin/
