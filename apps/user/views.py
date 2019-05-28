@@ -36,7 +36,7 @@ class UserCreateView(WithEmailMixin, CreateView):
             'created_user': self.object,
             'form_data': self.form_data,
             'message': _('Welcome'),
-            'action_url': reverse_lazy('authentication: login'),
+            'action_url': reverse_lazy('authentication:login'),
             'action_text': _('Sign In')
         })
         return super().get_email_context_data(**kwargs)
